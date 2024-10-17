@@ -1,0 +1,39 @@
+name: projeto_p1
+description: "A new Flutter project."
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: ^3.5.1
+
+dependencies:
+  flutter:
+    sdk: flutter
+  device_preview: ^1.2.0
+  get_it: ^8.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/login.png
+    - assets/logo_pollos.png
+    - assets/telaMenu.png
+    - assets/tacos.jpg
+    - assets/quesadilla.jpg
+    - assets/chiles.jpg
+    - assets/burrito.jpg
+    - assets/guacamole.jpg
+    - assets/chips.jpg
+    - assets/nachos.jpg
+    - assets/sopes.jpg
+    - assets/sopaipillas.jpg
+    - assets/churros.jpg
+    - assets/tresleches.jpg
+    - assets/flanmexicano.jpg
+    - assets/suco.jpg
+    - assets/refresco.jpg

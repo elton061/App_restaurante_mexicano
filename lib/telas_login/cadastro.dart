@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:projeto_p1/controladores/login_controller.dart';
 import 'login1.dart';
 
 class Cadastro extends StatelessWidget {
+  const Cadastro({super.key});
+
   @override
   Widget build(BuildContext context) {
     final TextEditingController controllCadastroEmail = TextEditingController();
     final TextEditingController controllCadastroUsuario =
         TextEditingController();
     final TextEditingController controllCadastroSenha = TextEditingController();
+
+    final LoginController loginController = LoginController();
 
     void validarCadastro() {
       String usuario = controllCadastroUsuario.text.trim();
@@ -19,12 +24,7 @@ class Cadastro extends StatelessWidget {
             content: Text('Preencha todos os campos para realizar o cadastro!'),
             backgroundColor: Colors.orange));
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text('Cadastro realizado com sucesso!'),
-            backgroundColor: Colors.orange));
-
-        Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => Login1()));
+        loginController.criarConta(context, usuario, email, senha);
       }
     }
 
@@ -35,12 +35,10 @@ class Cadastro extends StatelessWidget {
         body: Container(
             color: const Color.fromARGB(255, 253, 246, 237),
             child: Padding(
-                padding: const EdgeInsets.all(
-                    20.0), //Cria um espacamento entre as bordas e o limite da tela
+                padding: const EdgeInsets.all(20.0), 
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.center,
-                    // ignore: prefer_const_literals_to_create_immutables
                     children: [
                       Text('CADASTRO',
                           style: TextStyle(
@@ -59,8 +57,7 @@ class Cadastro extends StatelessWidget {
                             border: OutlineInputBorder(),
                             hintText: 'Digite o seu email'),
                       ),
-                      SizedBox(
-                          height: 15), // estabelece um espaco entre os campos
+                      SizedBox(height: 15),
                       TextField(
                           controller: controllCadastroUsuario,
                           decoration: InputDecoration(
@@ -68,10 +65,10 @@ class Cadastro extends StatelessWidget {
                             border: OutlineInputBorder(),
                             hintText: 'Digite seu nome de usuario',
                           )),
-                      SizedBox(
-                          height: 15), // estabelece um espaco entre os campos
+                      SizedBox(height: 15),
                       TextField(
                           controller: controllCadastroSenha,
+                          obscureText: true, // Senha oculta
                           decoration: InputDecoration(
                             labelText: 'Senha',
                             border: OutlineInputBorder(),
@@ -79,10 +76,6 @@ class Cadastro extends StatelessWidget {
                           )),
                       SizedBox(height: 60),
                       ElevatedButton(
-                        child: Text('CONFIRMAR',
-                            style: TextStyle(
-                              color: Colors.white,
-                            )),
                         style: ElevatedButton.styleFrom(
                           foregroundColor: Colors.white,
                           backgroundColor: Colors.red,
@@ -94,6 +87,10 @@ class Cadastro extends StatelessWidget {
                         onPressed: () {
                           validarCadastro();
                         },
+                        child: Text('CONFIRMAR',
+                            style: TextStyle(
+                              color: Colors.white,
+                            )),
                       ),
                     ]))));
   }

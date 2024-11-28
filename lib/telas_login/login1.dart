@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'resetar_senha.dart';
 import 'cadastro.dart';
@@ -10,42 +11,66 @@ class Login1 extends StatefulWidget {
 }
 
 class Login1State extends State<Login1> {
-  Widget build(BuildContext context) {
-    final TextEditingController controladorUsuario = TextEditingController();
-    final TextEditingController controladorSenha = TextEditingController();
+  final TextEditingController controladorUsuario = TextEditingController();
+  final TextEditingController controladorSenha = TextEditingController();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
-    void validarLogin() {
-      String usuario = controladorUsuario.text.trim();
-      String senha = controladorSenha.text.trim();
+  void validarLogin() async {
+    String usuario = controladorUsuario.text.trim();
+    String senha = controladorSenha.text.trim();
 
-      if (usuario.isEmpty || senha.isEmpty) {
+    if (usuario.isEmpty || senha.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Por favor, preencha usuário e senha!'),
+        backgroundColor: Colors.orange,
+      ));
+    } else {
+      try {
+        UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+          email: usuario,
+          password: senha,
+        );
+
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => TelaMenu()),
+        );
+      } on FirebaseAuthException catch (e) {
+        String errorMessage = 'Erro desconhecido';
+
+        if (e.code == 'user-not-found') {
+          errorMessage = 'Nenhum usuário encontrado com esse e-mail.';
+        } else if (e.code == 'wrong-password') {
+          errorMessage = 'Senha incorreta. Tente novamente.';
+        } else if (e.code == 'invalid-email') {
+          errorMessage = 'O formato do e-mail é inválido.';
+        } else if (e.code == 'network-request-failed') {
+          errorMessage = 'Falha na conexão com a rede. Tente novamente.';
+        }
+
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text('Por favor, preencha usuario e senha!'),
-          backgroundColor: Colors.orange,
-        ));
-      } else {
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => TelaMenu(),
+          content: Text(errorMessage),
+          backgroundColor: Colors.red,
         ));
       }
     }
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: const Color.fromARGB(255, 248, 176, 22),
-        ),
-        body: Center(
-          child: Container(
-            height: 750, // define a altura do container
-            width: 400, // define a largura do container
-            color: const Color.fromARGB(255, 253, 246, 237),
-            child: Center(
-                child: Padding(
-              padding: const EdgeInsets.all(
-                  20.0), //Cria um espacamento entre as bordas e o limite da tela
+      appBar: AppBar(
+        backgroundColor: const Color.fromARGB(255, 248, 176, 22),
+      ),
+      body: Center(
+        child: Container(
+          height: 750,
+          width: 400,
+          color: const Color.fromARGB(255, 253, 246, 237),
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
-                // ignore: prefer_const_literals_to_create_immutables
                 children: [
                   Image.asset('assets/login.png'),
                   SizedBox(height: 100),
@@ -54,15 +79,13 @@ class Login1State extends State<Login1> {
                         fontSize: 30,
                         color: Colors.black,
                       )),
-                  SizedBox(
-                      //cria um espaco de acordo com o tamanho inserido. Util para personalizar o alinhamento dos widgets
-                      height: 30),
+                  SizedBox(height: 30),
                   TextField(
                     controller: controladorUsuario,
                     decoration: InputDecoration(
-                        labelText: 'Usuário',
+                        labelText: 'Email',
                         border: OutlineInputBorder(),
-                        hintText: 'Digite seu nome de usuário'),
+                        hintText: 'Digite seu e-mail'),
                   ),
                   SizedBox(height: 50),
                   TextField(
@@ -71,14 +94,13 @@ class Login1State extends State<Login1> {
                         labelText: 'Senha',
                         border: OutlineInputBorder(),
                         hintText: 'Digite sua senha'),
-                    obscureText: true, // Para ocultar a senha
+                    obscureText: true,
                   ),
                   SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       TextButton(
-                        //Cria o botao resetar senha. O onpressed direciona para a pagina ao clickar no botao
                         onPressed: () {
                           Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => ResetarSenha(),
@@ -90,9 +112,7 @@ class Login1State extends State<Login1> {
                               color: const Color.fromARGB(255, 236, 69, 3),
                             )),
                       ),
-                      SizedBox(
-                          width:
-                              120), // separa os botoes esqueci e senha e criar conta
+                      SizedBox(width: 120),
                       TextButton(
                         onPressed: () {
                           Navigator.of(context).push(MaterialPageRoute(
@@ -125,8 +145,10 @@ class Login1State extends State<Login1> {
                   ),
                 ],
               ),
-            )),
+            ),
           ),
-        ));
+        ),
+      ),
+    );
   }
 }

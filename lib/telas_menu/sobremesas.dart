@@ -5,6 +5,8 @@ import 'package:projeto_p1/pratos_sobremesas/sopaipillas.dart';
 import 'package:projeto_p1/pratos_sobremesas/tres_leches.dart';
 
 class Sobremesas extends StatelessWidget {
+  const Sobremesas({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,7 +36,7 @@ class Sobremesas extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment
                         .center, // Coluna para exibir os pratos
                     children: [
-                      Container(
+                      SizedBox(
                           //Tacos
                           width: 400,
                           child: TextButton(
@@ -59,7 +61,7 @@ class Sobremesas extends StatelessWidget {
                       SizedBox(
                         height: 30,
                       ),
-                      Container(
+                      SizedBox(
                           //burrito
                           width: 400,
                           child: TextButton(
@@ -84,7 +86,7 @@ class Sobremesas extends StatelessWidget {
                       SizedBox(
                         height: 30,
                       ),
-                      Container(
+                      SizedBox(
                           //Quesadilla
                           width: 400,
                           child: TextButton(
@@ -109,7 +111,7 @@ class Sobremesas extends StatelessWidget {
                       SizedBox(
                         height: 30,
                       ),
-                      Container(
+                      SizedBox(
                           // Chiles en Nogada
                           width: 400,
                           child: TextButton(
